@@ -1,0 +1,39 @@
+{
+  "name": "a-accordian",
+  "description": "A lightweight custom element that converts details elements into a smooth opening/closing accordian widget",
+  "version": "1.0.0",
+  "license": "GPL-3.0-or-later",
+  "author": "Holmes Bryant <webmaastaa@gmail.com>",
+  "homepage": "https://github.com/HolmesBryant/a-accordian",
+  "type": "module",
+  "main": "./dist/a-accordian.min.js",
+  "module": "./dist/a-accordian.min.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/HolmesBryant/a-accordian.git"
+  },
+  "keywords": [
+    "module",
+    "component"
+  ],
+  "exports": {
+    ".": "./dist/a-accordian.min.js",
+    "./src/a-accordian.js": "./src/a-accordian.js"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "bugs": {
+    "url": "https://github.com/HolmesBryant/a-accordian/issues"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "reload"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "latest",
+    "@rollup/plugin-terser": "latest",
+    "rollup": "latest"
+  }
+}

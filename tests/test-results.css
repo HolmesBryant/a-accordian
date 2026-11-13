@@ -1,0 +1,58 @@
+test-results {
+	--info: "ℹ️ ";
+	--pass:  "👍 ";
+	--fail: "👎 ";
+	--error: "😱 ";
+	--result: "🎯 ";
+	--expected: "🤔 ";
+	--line: "#️⃣  ";
+	--skip: "⏭ ";
+
+	--background: linen;
+  --default-text: black;
+  --progress-color: dodgerblue;
+  --error-background: lavenderblush;
+  --error-text: indigo;
+  --error-border: fuchsia;
+  --fail-background: mistyrose;
+  --fail-text: firebrick;
+  --fail-border: red;
+  --info-background:  cornsilk;
+  --info-text: black;
+  --info-border: orange;
+  --pass-background: mintcream;
+  --pass-text: darkgreen;
+  --pass-border: green;
+  --skip-background: lavender;
+  --skip-text: darkslateblue;
+  --skip-border: dodgerblue;
+}
+
+test-results.text {
+	--info: "INFO ";
+	--pass:  "PASS ";
+	--fail: "FAIL ";
+	--error: "ERROR ";
+	--result: "Result: ";
+	--expected: "Expected: ; ";
+	--line: "Line: ";
+	--skip: "SKIP ";
+}
+
+test-results.texticons {
+	--info: "ℹ️ INFO ";
+	--pass:  "👍PASS ";
+	--fail: "👎FAIL ";
+	--error: "😱 ERROR ";
+	--result: "🎯 Result: ";
+	--expected: "🤔 Expected: ";
+	--line: "#️⃣  Line: ";
+	--skip: "⏭ SKIP";
+}
+
+@media (prefers-color-scheme: dark) {
+	test-results {
+		--background: darkslategray;
+	  --default-text: white;
+	}
+}

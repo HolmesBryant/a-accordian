@@ -1,0 +1,94 @@
+/**************************************************************
+	CSS styles for a-accordian.
+	The component adds a "part" attribute to each <details>, <summary>,
+	and the first non-summary child (the content) of each <details>.
+	This enables you to style the accordian from a normal css stylesheet.
+
+	For example, if your accordian has two items, you get:
+
+	<details part="details details1">
+	  <summary part="summary summary1">...</summary>
+	  <div part="content content1">...</div>
+	</details>
+
+	<details part="details details2">
+	  <summary part="summary summary2">...</summary>
+	  <div part="content content2">...</div>
+	</details>
+
+	In addition, when an item is open, the <details> and <summary> get an additional "open" part.
+
+	<details open part="details details2 open">
+		<summary part="summary summary2 open">...</summary>
+		...
+	</details>
+
+	You may also add your own "part" value to the mix by manually
+	adding a part attribute to any details, summary, or content container element.
+	For example, if your HTML looks like:
+	<a-accordian>
+		<details part="foo">
+			<summary part="bar">...</summary>
+			<div part="baz">...</div>
+		</details>
+	</a-accordian>
+
+	The resulting accordian will be rendered as:
+	<details part="foo details details1">
+		<summary part="bar summary summary1">...</summary>
+		<div part="baz content content1">...</div>
+	</details>
+*************************************************************/
+
+a-accordian {
+	--speed: .5s;
+	border: 1px solid silver;
+	border-radius: .5rem;
+	color-scheme: light dark;
+	color: light-dark(black, white);
+}
+
+/**** Backgrounds ****/
+
+a-accordian::part(details)
+{ background: light-dark(ghostwhite, slategray) }
+
+a-accordian::part(summary)
+{ background: light-dark(linen, darkslategray) }
+
+/**** Borders ****/
+
+a-accordian::part(summary)
+{ border-bottom: 1px solid silver; }
+
+a-accordian::part(details1),
+a-accordian::part(summary1)
+{ border-radius: .5rem .5rem 0 0; }
+
+a-accordian::part(details3),
+a-accordian::part(summary3) {
+	border-bottom: none;
+	border-radius: 0 0 .5rem .5rem;
+}
+
+a-accordian::part(summary open)
+{ border-radius: 0 }
+
+/**** Misc ****/
+
+a-accordian::part(details) {
+	max-height: 50dvh;
+	overflow: auto;
+	position: relative;
+}
+
+a-accordian::part(summary) {
+	font-weight: bold;
+	padding: .25rem;
+	position: sticky;
+	top: 0;
+}
+
+a-accordian::part(content) {
+	padding: 0 1rem;
+}

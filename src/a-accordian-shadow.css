@@ -1,0 +1,39 @@
+:host {
+  --speed:  0.25s;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+}
+
+@supports selector(::details-content) and (transition-behavior: allow-discrete) {
+  details::details-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows var(--speed) ease-in-out,
+      opacity var(--speed) ease-in-out,
+      content-visibility var(--speed) ease-in-out allow-discrete;
+  }
+
+  details[open]::details-content {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+
+  details > [data-content] {
+    display: flow-root;
+    min-block-size: 0;
+    overflow-y: clip;
+  }
+
+  summary {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    details::details-content {
+      transition: none;
+    }
+  }
+}
