@@ -2,6 +2,8 @@
 
 `<a-accordian>` is a lightweight, zero-dependency Web Component that turns standard `<details>` and `<summary>` elements into a smoothly animated accordion using native HTML semantics and modern CSS transitions.
 
+Demo: [https://holmesbryant.github.io/a-accordian/](https://holmesbryant.github.io/a-accordian/)
+
 ## Features
 
 - **Progressive enhancement** built on native `<details>` and `<summary>` elements
