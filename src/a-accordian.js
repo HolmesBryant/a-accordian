@@ -8,7 +8,7 @@
 import styles from './a-accordian-shadow.css' with { type: 'css' };
 
 /**
- * An accordion custom element that animates open/close states using CSS transitions.
+ * An accordion custom element that smoothly animates open/close states using CSS transitions.
  *
  * @class AAccordian
  * @extends HTMLElement
