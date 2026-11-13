@@ -1,5 +1,5 @@
 /**
- * @file src/a-accordian.js
+ * @file a-accordian.js
  * @author Holmes Bryant <Holmes Bryant <https://github.com/HolmesBryant>
  * @license GPL-3.0
  * @version 1.0
