@@ -32,7 +32,7 @@ In browsers without support for those transition features, `<details>` items sti
 Include `a-accordian.min.js` in your project and import it as an ES module:
 
 ```html
-<script type="module" src="a-accordian.js"></script>
+<script type="module" src="a-accordian.min.js"></script>
 ```
 
 Or import it in JavaScript. Importing the module automatically registers the `<a-accordian>` custom element if it has not already been defined:
