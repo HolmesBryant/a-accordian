@@ -7,21 +7,29 @@ Demo: [https://holmesbryant.github.io/a-accordian/](https://holmesbryant.github.
 ## Features
 
 - **Progressive enhancement** built on native `<details>` and `<summary>` elements
-- **Smooth open/close animations** using a `.accordian-content` wrapper, CSS Grid row transitions (`0fr` to `1fr`), opacity fading, and modern CSS transitions
+
+- **Smooth open/close animations** using modern CSS transitions
+
 - **Shadow DOM encapsulation** with external stylesheet injection via `stylesheets` and styling hooks via CSS `::part()`
+
 - **Exclusive accordion grouping** within an instance via the native `<details name>` attribute (or non-exclusive mode when disabled)
-- **Cross-instance grouping** across selected `<a-accordian>` instances via the `shared` attribute/property
+
+- **Cross-instance grouping** across selected `<a-accordian>` instances via the `shared` attribute/property, allowing seleted instances to behave as a single accordian.
+
 - **Accessible by default** with native keyboard navigation and `@media (prefers-reduced-motion: reduce)` support
+
 - **Declarative and programmatic control** via HTML attributes and JavaScript properties
 
 ## Requirements
 
-- A browser with support for ES module CSS imports (`import ... with { type: 'css' }`), `adoptedStyleSheets`, and CSS `::part()`.
-- Smooth animations rely on CSS rules in `a-accordian-shadow.css` (CSS Grid row transitions, `::details-content`, and `transition-behavior: allow-discrete`). In browsers without support for those transition features, `<details>` items still open and close natively without transitions.
+- A browser with support for ES module imports and CSS `::part()`.
+- Smooth animations rely on CSS rules (CSS Grid row transitions, `::details-content`, and `transition-behavior: allow-discrete`).
+
+In browsers without support for those transition features, `<details>` items still open and close natively without transitions.
 
 ## Installation
 
-Include `a-accordian.js` (alongside `a-accordian-shadow.css`) or a bundled `a-accordian.min.js` in your project and import it as an ES module:
+Include `a-accordian.min.js` in your project and import it as an ES module:
 
 ```html
 <script type="module" src="a-accordian.js"></script>
@@ -79,7 +87,7 @@ Use `group` to set a custom `<details name>` group or disable exclusive behavior
 
 ```html
 <!-- Custom group name -->
-<a-accordian group="faq-billing">
+<a-accordian group="faq">
   <details>
     <summary>Question 1</summary>
     <p>Answer 1</p>
@@ -105,31 +113,16 @@ Use `group` to set a custom `<details name>` group or disable exclusive behavior
 
 ### Sharing a Group Across Multiple Instances
 
-Because each `<a-accordian>` renders inside its own Shadow DOM, native `<details name>` grouping is isolated to a single instance. Add the `shared` attribute to make a selected set of `<a-accordian>` instances behave as one unified exclusive group—opening a `<details>` item in one instance automatically closes any open `<details>` item in the other instances sharing the same key.
+Because each `<a-accordian>` renders inside its own Shadow DOM, native `<details name>` grouping is isolated to a single instance. Add the `shared` attribute to make a selected set of `<a-accordian>` instances behave as one unified accordian.
 
-You can pass an explicit shared group name, or use `shared` as a boolean attribute to reuse the value of `group`:
+In other words, opening an item in one `<a-accordian>` instance automatically closes any open item in all other instances sharing the same key.
+
+Pass an explicit shared `group` name and add `shared` as a boolean attribute in order to group instances:
 
 ```html
-<!-- Set 1: explicit shared group name -->
-<a-accordian shared="faq" active="1">
-  <details>
-    <summary>General Question 1</summary>
-    <p>Answer 1</p>
-  </details>
-  <details>
-    <summary>General Question 2</summary>
-    <p>Answer 2</p>
-  </details>
-</a-accordian>
 
-<a-accordian shared="faq">
-  <details>
-    <summary>Billing Question 1</summary>
-    <p>Answer 3</p>
-  </details>
-</a-accordian>
+<!-- boolean `shared` reuses the `group` attribute ("pricing") -->
 
-<!-- Set 2: boolean `shared` reuses the `group` attribute ("pricing") -->
 <a-accordian group="pricing" shared>
   <details>
     <summary>Plan A</summary>
@@ -158,7 +151,7 @@ You can pass an explicit shared group name, or use `shared` as a boolean attribu
 Use `stylesheets` with one or more comma-separated CSS URLs to load external `<link rel="stylesheet">` tags inside the component's Shadow DOM:
 
 ```html
-<a-accordian stylesheets="/css/theme.css,/css/accordion.css">
+<a-accordian stylesheets="/css/theme.css, /css/accordion.css">
   <details>
     <summary>Styled Section</summary>
     <p>Styled inside the Shadow DOM.</p>
@@ -306,12 +299,9 @@ You can also style elements inside the Shadow DOM directly using the `stylesheet
 
 ## Change Log
 
-- **v1.6**
-  - Added `shared` attribute/property to synchronize exclusive `<details>` grouping across selected `<a-accordian>` instances
+- **v2.0**
+  - Added `shared` attribute/property to synchronize selected `<a-accordian>` instances so they behave as one accordian.
 - **v1.5**
-  - Added Shadow DOM encapsulation (`adoptedStyleSheets` with `a-accordian-shadow.css`)
-  - Wrapped `<details>` body nodes in `<div class="accordian-content">` for CSS Grid row transitions
-  - Added `stylesheets` attribute/property for injecting Shadow DOM `<link rel="stylesheet">` elements
-  - Toggled `"open"` part on `.accordian-content` in addition to `<details>` and `<summary>`
+  - Added `stylesheets` attribute to allow for importing css stylesheets into the Shadow DOM.
 - **v1**
   - Initial commit
