@@ -1,0 +1,14 @@
+
+/* Example CSS to style a-code from light DOM */
+
+a-code {
+	--line-number-color: gray;
+ }
+
+a-code::part(section) {
+	background-color: black;
+	border-radius: .5rem;
+}
+
+a-code::part(line-numbers) {}
+a-code::part(content) {}

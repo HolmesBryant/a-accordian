@@ -1,11 +1,11 @@
 const sheet = new CSSStyleSheet();
-          sheet.replaceSync(":host { --speed: 0.25s; display: block; width: 100%; font-family: inherit;}@supports selector(::details-content) and (transition-behavior: allow-discrete) { details::details-content { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows var(--speed) ease-in-out, opacity var(--speed) ease-in-out, content-visibility var(--speed) ease-in-out allow-discrete; } details[open]::details-content { grid-template-rows: 1fr; opacity: 1; } details > [data-content] { display: flow-root; min-block-size: 0; overflow-y: clip; } summary { cursor: pointer; } @media (prefers-reduced-motion: reduce) { details::details-content { transition: none; } }}");
+          sheet.replaceSync(":host { --speed: 0.25s; display: block; width: 100%; font-family: inherit;}details > .accordian-content { display: flow-root; min-block-size: 0; overflow-y: clip; padding: 0; transition: padding var(--speed) ease-in-out;}details[open] > .accordian-content { padding: .5rem;}summary { cursor: pointer; font-size: unset; margin: 0 !important; }@supports selector(::details-content) { details::details-content { display: grid; grid-template-rows: 0fr; opacity: 0; padding: 0; transition: content-visibility var(--speed) ease-in-out allow-discrete, grid-template-rows var(--speed) ease-in-out, opacity var(--speed) ease-in-out; } details[open]::details-content { grid-template-rows: 1fr; opacity: 1; } @media (prefers-reduced-motion: reduce) { details::details-content { transition: none; } }}");
 
 /**
  * @file a-accordian.js
  * @author Holmes Bryant <Holmes Bryant <https://github.com/HolmesBryant>
  * @license GPL-3.0
- * @version 1.0
+ * @version 2.0
  */
 
 
@@ -16,6 +16,8 @@ const sheet = new CSSStyleSheet();
  * @extends HTMLElement
  */
 class AAccordian extends HTMLElement {
+  debug = false;
+
   // --- Attributes ---
 
   /**
@@ -32,6 +34,21 @@ class AAccordian extends HTMLElement {
    * @default 'a-accordian'
    */
   #group = 'a-accordian';
+
+  /**
+   * Shared group setting: `null` (disabled), `true` (use `#group`), or explicit group name.
+   * @private
+   * @type {string|boolean|null}
+   */
+  #shared = null;
+
+  /**
+   * Path to one or more importable css stylesheets
+   * @private
+   * @type {Set}
+   * @default []
+   */
+  #stylesheets = new Set();
 
   // --- Properties ---
 
@@ -53,11 +70,26 @@ class AAccordian extends HTMLElement {
   #items;
 
   /**
+   * Key currently registered in `#sharedGroups` for this instance.
+   * @private
+   * @type {?string}
+   */
+  #registeredGroup = null
+
+  /**
+   * Registry of `<a-accordian>` instances keyed by shared group name.
+   * @private
+   * @static
+   * @type {Map<string, Set<AAccordian>>}
+   */
+  static #sharedGroups = new Map();
+
+  /**
    * Attributes monitored for changes via `attributeChangedCallback`.
    * @static
    * @type {string[]}
    */
-  static observedAttributes = ['active', 'group'];
+  static observedAttributes = ['active', 'debug', 'group', 'shared', 'stylesheets'];
 
   constructor() {
     super();
@@ -84,8 +116,20 @@ class AAccordian extends HTMLElement {
         this.#active = newval ? Number.parseInt(newval, 10) : null;
         if (this.#connected) this.#setActive(this.#active);
         break;
+      case 'debug':
+        this.debug = this.hasAttribute(attr);
+        break;
       case 'group':
         this.#group = newval;
+        if (this.#connected) this.#init();
+        break;
+      case 'shared':
+        if (this.hasAttribute(attr)) this.#shared = newval || true;
+        if (this.#connected) this.#syncSharedGroup();
+        break;
+      case 'stylesheets':
+        if (typeof newval === 'string') newval.split(',').map( item => this.#createLink(item) );
+        else this.#stylesheets.clear();
         if (this.#connected) this.#init();
         break;
     }
@@ -98,11 +142,11 @@ class AAccordian extends HTMLElement {
    * @returns {void}
    */
   connectedCallback() {
-    this.#abortController = new AbortController();
     const items = this.querySelectorAll('details');
     this.#items = items.length ? items : this.shadowRoot.querySelectorAll('details');
     this.#init();
     this.#connected = true;
+    this.#syncSharedGroup();
   }
 
   /**
@@ -112,6 +156,7 @@ class AAccordian extends HTMLElement {
    * @returns {void}
    */
   disconnectedCallback() {
+    this.#unregisterSharedGroup();
     this.#items = null;
     this.#connected = false;
     if (this.#abortController) {
@@ -123,6 +168,47 @@ class AAccordian extends HTMLElement {
   // --- Private ---
 
   /**
+   * Closes all other open `<details>` elements across instances in the same shared group.
+   * @private
+   * @param {HTMLDetailsElement} activeItem
+   * @returns {void}
+   */
+  #closeOthersInSharedGroup(activeItem) {
+    if (!this.#registeredGroup) return;
+    const set = AAccordian.#sharedGroups.get(this.#registeredGroup);
+    if (!set) return;
+
+    for (const instance of set) {
+      instance.#items?.forEach(other => {
+        if (other !== activeItem && other.open) {
+          other.open = false;
+        }
+      });
+    }
+  }
+
+  /**
+   * Create a link rel="stylesheet" and add it to this.#stylesheets
+   * @param {string} url - The url to the stylesheet
+   */
+  #createLink(url) {
+    const link = document.createElement('link');
+    link.rel = "stylesheet";
+    link.href = url;
+    this.#stylesheets.add(link);
+  }
+
+  /**
+   * Resolves the effective shared group key, or `null` if disabled.
+   * @private
+   * @returns {?string}
+   */
+  #getSharedKey() {
+    if (!this.#shared) return null;
+    return this.#shared === true ? this.#group : this.#shared;
+  }
+
+  /**
    * Wraps item contents, configures `name` grouping, mounts items into the
    * Shadow DOM, and opens the initial active item if configured.
    *
@@ -130,48 +216,106 @@ class AAccordian extends HTMLElement {
    * @returns {void}
    */
   #init() {
+    this.#abortController?.abort();
+    this.#abortController = new AbortController();
+
+    const links = [];
+    if (this.#stylesheets.size > 0) {
+      for (const link of this.#stylesheets) {
+        links.push(link);
+      }
+    }
+
     this.#items.forEach((item, index) => {
       index = index + 1;
       const summary = item.querySelector('summary');
+      this.#wrapContent(item, summary, index);
       item.part.add('details');
       item.part.add(`details${index}`);
-      item.addEventListener('toggle', e => {
-        item.part.toggle('open');
-        summary.part.toggle('open');
-      }, {signal: this.#abortController.signal });
+
+      item.addEventListener('toggle', () => {
+        item.part.toggle('open', item.open);
+        summary?.part.toggle('open', item.open);
+        item.querySelector(':scope > .accordian-content')?.part.toggle('open', item.open);
+
+        if (item.open) this.#closeOthersInSharedGroup(item);
+      }, { signal: this.#abortController.signal });
 
       if (summary) {
         summary.part.add('summary');
         summary.part.add(`summary${index}`);
       }
-      this.#wrapContent(item, summary, index);
 
       if (this.#group) item.name = this.#group;
       else item.removeAttribute('name');
     });
 
-    this.shadowRoot.replaceChildren(...this.#items);
+    this.shadowRoot.replaceChildren(...links, ...this.#items);
 
     if (this.#active) this.#setActive(this.#active);
   }
 
   /**
+   * Registers/updates this instance in `#sharedGroups` and enforces that
+   * at most one `<details>` is open in the group.
+   * @private
+   * @returns {void}
+   */
+  #syncSharedGroup() {
+    const nextKey = this.#getSharedKey();
+    if (nextKey !== this.#registeredGroup) {
+      this.#unregisterSharedGroup();
+      if (nextKey) {
+        let set = AAccordian.#sharedGroups.get(nextKey);
+        if (!set) {
+          set = new Set();
+          AAccordian.#sharedGroups.set(nextKey, set);
+        }
+        set.add(this);
+        this.#registeredGroup = nextKey;
+      }
+    }
+
+    // If this instance already has an open item (via `active` or `<details open>`),
+    // close open items in the other instances of the same shared group.
+    if (this.#registeredGroup && this.#items?.length) {
+      const openItem = [...this.#items].findLast(item => item.open);
+      if (openItem) this.#closeOthersInSharedGroup(openItem);
+    }
+  }
+
+  /**
+   * Removes this instance from its current shared group registry.
+   * @private
+   * @returns {void}
+   */
+  #unregisterSharedGroup() {
+    if (!this.#registeredGroup) return;
+    const set = AAccordian.#sharedGroups.get(this.#registeredGroup);
+    if (set) {
+      set.delete(this);
+      if (set.size === 0) AAccordian.#sharedGroups.delete(this.#registeredGroup);
+    }
+    this.#registeredGroup = null;
+  }
+
+  /**
    * Wraps non-`<summary>` child nodes of a `<details>` element inside a
-   * `<div data-content>` element to enable CSS Grid row transitions.
+   * `<div class="accordian-content"` element to enable CSS Grid row transitions.
    *
    * @private
    * @param {HTMLDetailsElement} details - The `<details>` element to wrap.
    * @returns {void}
    */
   #wrapContent(details, summary, index) {
-    if (details.querySelector(':scope > [data-content]')) return;
+    if (details.querySelector(':scope > .accordian-content')) return;
 
     const contentNodes = [...details.childNodes].filter(node => node !== summary && node.nodeValue?.trim() !== '');
     if (!contentNodes.length) return;
 
     const wrapper = document.createElement('div');
     const contentParts = (contentNodes[0].getAttribute('part') ?? '') + ` content content${index}`;
-    wrapper.toggleAttribute('data-content', true);
+    wrapper.classList.add('accordian-content');
     wrapper.setAttribute('part', contentParts);
     wrapper.append(...contentNodes);
     details.append(wrapper);
@@ -233,6 +377,38 @@ class AAccordian extends HTMLElement {
   set group(value) {
     if (value) this.setAttribute('group', value);
     else this.removeAttribute('group');
+  }
+
+  /**
+   * Gets the shared group configuration (`null`, `true`, or explicit group name).
+   * @type {string|boolean|null}
+   */
+  get shared() { return this.#shared }
+
+  /**
+   * Sets or removes the `shared` attribute.
+   * @param {string|boolean|null|undefined} value
+   */
+  set shared(value) {
+    if (value === true || value === '') this.setAttribute('shared', '');
+    else if (value) this.setAttribute('shared', value);
+    else this.removeAttribute('shared');
+  }
+
+  /**
+   * Gets the url(s) of importable css stylesheets
+   * @type {Set}
+   * @returns {Set}
+   */
+  get stylesheets() { return this.#stylesheets }
+
+  /** Sets the url(s) of importable css stylesheets
+   * @param {string | array} value - An array or comma-separated string of URLs
+   */
+  set stylesheets(value) {
+    if (typeof value === 'string') this.setAttribute('stylesheets', value);
+    else if (Array.isArray(value)) this.setAttribute('stylesheets', value.join(','));
+    else this.removeAttribute('stylesheets');
   }
 }
 

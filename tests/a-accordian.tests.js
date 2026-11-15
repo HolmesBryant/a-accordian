@@ -61,7 +61,7 @@ group('Registration & Initial State', () => {
   test('instance extends HTMLElement', el instanceof HTMLElement, true);
   test('creates an open shadowRoot', el.shadowRoot?.mode, 'open');
   test('adopts shadow stylesheet', el.shadowRoot.adoptedStyleSheets.length, 1);
-  test('observes "active" and "group" attributes', equal(AAccordian.observedAttributes, ['active', 'group']), true);
+  test('observes attributes', equal(AAccordian.observedAttributes, ['active', 'debug' ,'group', 'shared', 'stylesheets']), true);
   test('default group property is "a-accordian"', el.group, 'a-accordian');
   test('default active property is undefined', el.active, null);
 
@@ -75,8 +75,8 @@ group('DOM Mounting & Content Wrapping', () => {
   test('moves details elements out of light DOM', el.querySelectorAll('details').length, 0);
   test('renders all details elements inside shadowRoot', shadowItems.length, 3);
   test('keeps summary as direct child of details', shadowItems[0].querySelector(':scope > summary')?.textContent, 'Section 1');
-  test('wraps non-summary nodes in div data-content', () => {
-    const wrapper = shadowItems[0].querySelector(':scope > div[data-content]');
+  test('wraps non-summary nodes in div.accordian-content', () => {
+    const wrapper = shadowItems[0].querySelector(':scope > div.accordian-content');
     return wrapper?.querySelector('p')?.textContent;
   }, 'Content 1');
   test('does not wrap details with no content nodes besides summary', () => {
@@ -85,8 +85,8 @@ group('DOM Mounting & Content Wrapping', () => {
 
   // Trigger _init() again via group change and ensure no double-wrapping occurs
   el.group = 'reinit-group';
-  test('does not double-wrap [data-content] when re-initialized', () => {
-    return el.shadowRoot.querySelectorAll('details:first-child [data-content]').length;
+  test('does not double-wrap div.accordian-content when re-initialized', () => {
+    return el.shadowRoot.querySelectorAll('details:first-child .accordian-content').length;
   }, 1);
 
   // Disconnect and reconnect
@@ -163,6 +163,31 @@ group('Grouping Behavior (group attribute & property)', () => {
   el.setAttribute('group', 'false');
   test('group="false" disables grouping', el.group, null);
 
+
+  test("Shared accordians should behave as single accordian.", async () => {
+    const shared1 = createAccordian({ items: 3, groupName: 'foo' });
+    const shared2 = createAccordian({ items: 3, groupName: 'foo' });
+
+    try {
+      shared1.shared = true;
+      shared2.shared = true;
+
+      const sItems1 = shared1.shadowRoot.querySelectorAll('details');
+      const sItems2 = shared2.shadowRoot.querySelectorAll('details');
+
+      shared1.active = 1;
+      await when(() => sItems1[0].part.contains('open'), 500, 10);
+
+      shared2.active = 2;
+      await when(() => !sItems1[0].open && sItems2[1].open, 500, 10);
+
+      return [sItems1[0].open, sItems2[1].open];
+    } finally {
+      shared1.remove();
+      shared2.remove();
+    }
+  }, [false, true]);
+
   el.remove();
 });
 
@@ -194,13 +219,13 @@ group('Active Item Selection (active attribute & property)', () => {
   el.remove();
 });
 
-group('Testing genCombos() across active & group combinations', () => {
+group('Testing various attribute combinations', () => {
   const options = {
     active: [1, 2, 3],
     group: ['alpha', 'beta']
   };
 
-  log('Accordian combo options', options);
+  info(JSON.stringify(options));
 
   for (const combo of genCombos(options)) {
     const el = createAccordian({

@@ -6,17 +6,20 @@
 	<title>A-Accordian Custom Element</title>
 	<!-- <script type="module" src="src/a-accordian.js"></script> -->
 	<script type="module" src="dist/a-accordian.min.js"></script>
+
 	<script type="module" src="extra/a-markdown.min.js"></script>
+	<script type="module" src="extra/a-code.min.js"></script>
 
 	<link rel="stylesheet" href="extra/styles.css">
-	<link rel="stylesheet" href="dist/a-accordian.css">
 	<link rel="stylesheet" href="extra/a-markdown.css">
+	<link rel="stylesheet" href="extra/a-accordian.css">
+	<link rel="stylesheet" href="extra/a-code.css">
 </head>
 <body>
 
 <header>
 	<h1>A-Accordian</h1>
-	<h4>A Custom Element which uses <code class="tag">details</code> elements to render an accordian that animates open/close states using CSS transitions</h4>
+	<p>A Custom Element which uses <code class="tag">details</code> elements to render an accordian that animates open/close states using CSS transitions</p>
 
 	<details id="readme">
 		<summary>README</summary>
@@ -24,31 +27,412 @@
 	</details>
 </header>
 
-<section>
+<section class="flex column stretch">
 	<header class="flex space-between">
-			<h2>Demo</h2>
-			<a href="tests/index.html" target="_blank">Tests</a>
-		</header>
-	<a-accordian active = "2">
-		<details>
-			<summary>Option A</summary>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</details>
+		<h2>Examples</h2>
+		<a href="tests/index.html" target="_blank">Tests</a>
+	</header>
+
+	<div class="card">
+	<h3>Basic accordian</h3>
+		<p>The accordian operates in exclusive (group) mode by default.</p>
+		<a-accordian class="unstyled">
+			<details>
+				<summary>Option A</summary>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+			</details>
+
+			<details>
+				<summary>Option B</summary>
+				<div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</details>
+			<details>
+				<summary>Option C</summary>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			</details>
+		</a-accordian>
+
+		<br>
 
 		<details>
-			<summary>Option B</summary>
-			<p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-		</details>
+			<summary>Code</summary>
 
-		<details part="last">
-			<summary part="bar">Option C</summary>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+			<a-code highlight>
+				<textarea>
+					<a-accordian>
+						<details>
+							<summary>Option A</summary>
+							<p>Some content...</p>
+						</details>
+
+						<details>
+							<summary>Option B</summary>
+							<p>Some content...</p>
+						</details>
+					</a-accordian>
+				</textarea>
+			</a-code>
 		</details>
-	</a-accordian>
+	</div>
+
+	<div class="card">
+	<h3>Non-exclusive mode</h3>
+		<p>In non-exclusive mode, several items can be open at the same time. To acconplish this, set <code>group</code> to "false".</p>
+
+		<a-accordian class="unstyled" group="false">
+			<details>
+				<summary>Option A</summary>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+			</details>
+
+			<details>
+				<summary>Option B</summary>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+			</details>
+			<details>
+				<summary>Option C</summary>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+			</details>
+		</a-accordian>
+
+		<br>
+
+		<details>
+			<summary>Code</summary>
+			<a-code highlight>
+				<textarea>
+					<a-accordian group="false">
+						<details>
+							<summary>Option A</summary>
+							<p>Some content...</p>
+						</details>
+
+						<details>
+							<summary>Option B</summary>
+							<p>Some content...</p>
+						</details>
+					</a-accordian>
+				</textarea>
+			</a-code>
+		</details>
+	</div>
+
+	<div class="card">
+	<h3>Using the "shared" attribute</h3>
+		<p>You can group several instances of <code class="tag">a-accordian</code> so they behave as a single accordian. Here are two accordians belonging to the shared group "foo" and two accordians belonging to the shared group "bar".</p>
+
+		<div class="flex">
+			<div class="flex1">
+				<h4>Group "foo"</h4>
+				<a-accordian class="unstyled" group="foo" shared>
+					<details>
+						<summary>Option A</summary>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+
+					<details>
+						<summary>Option B</summary>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+				</a-accordian>
+
+				<hr>
+
+				<a-accordian class="unstyled" group="foo" shared>
+					<details>
+						<summary>Option A</summary>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+
+					<details>
+						<summary>Option B</summary>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+				</a-accordian>
+			</div>
+
+			<div class="flex1">
+				<h4>Group "bar"</h4>
+				<a-accordian class="unstyled" group="bar" shared>
+					<details>
+						<summary>Option A</summary>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+
+					<details>
+						<summary>Option B</summary>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+				</a-accordian>
+
+				<hr>
+
+				<a-accordian class="unstyled" group="bar" shared>
+					<details>
+						<summary>Option A</summary>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+
+					<details>
+						<summary>Option B</summary>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod</p>
+					</details>
+				</a-accordian>
+			</div>
+		</div>
+
+		<br>
+
+		<details>
+			<summary>Code</summary>
+			<a-code highlight>
+				<textarea>
+					<a-accordian group="foo" shared>
+						...
+					</a-accordian>
+
+					<a-accordian group="foo" shared>
+						...
+					</a-accordian>
+
+					<!------------------------------->
+
+					<a-accordian group="bar" shared>
+						...
+					</a-accordian>
+
+					<a-accordian group="bar" shared>
+						...
+					</a-accordian>
+				</textarea>
+			</a-code>
+		</details>
+	</div>
+
+	<div class="card">
+	<h3>Styling the accordian</h3>
+		<p><code class="tag">a-accordian</code> exposes several css <code>::part()</code> selectors, allowing you to perform basic styling. See the README for more details.</p>
+
+		<a-accordian>
+			<details>
+				<summary>Example</summary>
+
+				<div class="flex column stretch">
+					<p>As you can see, some elements are not styled.</p>
+
+					<div class="flex space-around">
+						<label class="flex column start">
+							<span>A Text Input</span>
+							<input name="text-input" placeholder="Type something">
+						</label>
+
+						<label class="flex column">
+							<span>Foo</span>
+							<input type="checkbox" name="cbfoo">
+						</label>
+
+						<label class="flex column">
+							<span>Bar</span>
+							<input checked type="checkbox" name="cbbar">
+						</label>
+
+						<fieldset class="flex space-around">
+							<legend>Some Radio Inputs</legend>
+
+							<label class="flex column">
+								<span>A</span>
+								<input type="radio" name="ri" value="A">
+							</label>
+
+							<label class="flex column">
+								<span>B</span>
+								<input checked type="radio" name="ri" value="B">
+							</label>
+
+							<label class="flex column">
+								<span>C</span>
+								<input type="radio" name="ri" value="C">
+							</label>
+						</fieldset>
+					</div>
+
+					<div class="flex column stretch">
+						<label for="ta">A Textarea</label>
+
+						<textarea id="ta">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+					</div>
+				</div>
+			</details>
+
+			<details>
+				<summary>Code</summary>
+				<a-code highlight>
+					<textarea>
+						<!-- index.html -->
+						<link
+							rel="stylesheet"
+							href="a-accordian.css">
+
+						<a-accordian>
+							...
+						</a-accordian>
+
+						/* a-accordian.css */
+
+						a-accordian {
+							--speed: .5s;
+							color-scheme: light dark;
+							color: light-dark(hsl(0, 0%, 30%), white);
+						}
+
+						a-accordian::part(details) {
+							max-height: 50dvh;
+							overflow: auto;
+							position: relative;
+						}
+
+						a-accordian::part(summary) {
+							background: light-dark(
+								hsl(30, 66.667%, 85%),
+								darkslategray
+							);
+							border-bottom: 1px solid silver;
+							font-weight: bold;
+							padding: .25rem;
+							position: sticky;
+							top: 0;
+						}
+
+						a-accordian::part(content) {
+							background: light-dark(
+								hsl(30, 66.667%, 94%),
+								hsl(210, 12.598%, 20%)
+							);
+						}
+					</textarea>
+				</a-code>
+			</details>
+		</a-accordian>
+	</div>
+
+	<div class="card">
+		<h3>Adding styles to the Shadow DOM</h3>
+		<p>Using the <code>stylesheets</code> attribute, you can inject styles into the Shadow DOM of the component, allowing for much more robust CSS styling.</p>
+		<a-accordian
+			stylesheets="extra/styles.css, dist/a-accordian.shadow.css">
+			<details>
+				<summary>Example</summary>
+
+				<div class="flex column">
+					<p>Normally inaccessable elements can be styled by importing a stylesheet into the Shadow DOM.</p>
+
+					<div class="card flex column stretch">
+						<label class="flex column start">
+							<span>A Text Input</span>
+							<input name="text-input" placeholder="Type something">
+						</label>
+
+						<div class="flex space-around">
+							<label class="flex column">
+								<span>Foo</span>
+								<input type="checkbox" name="cbfoo">
+							</label>
+
+							<label class="flex column">
+								<span>Bar</span>
+								<input checked type="checkbox" name="cbbar">
+							</label>
+						</div>
+
+						<fieldset class="flex space-around">
+							<legend>Some Radio Inputs</legend>
+
+							<label class="flex column">
+								<span>A</span>
+								<input type="radio" name="ri" value="A">
+							</label>
+
+							<label class="flex column">
+								<span>B</span>
+								<input checked type="radio" name="ri" value="B">
+							</label>
+
+							<label class="flex column">
+								<span>C</span>
+								<input type="radio" name="ri" value="C">
+							</label>
+						</fieldset>
+
+						<div class="flex column start">
+							<label for="ta">A Textarea</label>
+
+							<textarea id="ta">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea>
+						</div>
+					</div>
+				</div>
+			</details>
+
+			<details>
+				<summary>Code</summary>
+				<a-code highlight>
+					<textarea>
+						<!-- index.html -->
+						<link
+							rel="stylesheet"
+							href="a-accordian.css">
+
+						<!-- You can include multiple comma-separated URLs -->
+						<a-accordian
+							stylesheets="
+								styles.css,
+								a-accordian.shadow.css">
+							...
+						</a-accordian>
+
+						/* styles.css */
+
+						label {
+							font-weight: bold;
+						}
+
+						input,
+						textarea {
+							min-height: 35px;
+						}
+
+						/* etc... */
+
+						-------------------------
+
+						/* a-accordian.shadow.css */
+
+						:host {
+							border: 1px solid silver;
+							border-radius: .5rem;
+						}
+
+						details:first-of-type,
+						details:first-of-type > summary
+						{ border-radius: .5rem .5rem 0 0; }
+
+						details:last-of-type,
+						details:last-of-type > summary {
+							border-radius: 0 0 .5rem .5rem;
+						}
+
+						details:last-of-type > summary
+						{ border-bottom: none !important }
+					</textarea>
+				</a-code>
+			</details>
+		</a-accordian>
+	</div>
 </section>
+
+
 </body>
 </html>

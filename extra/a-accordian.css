@@ -1,0 +1,33 @@
+/* Light DOM CSS */
+@scope (a-accordian:not(.unstyled)) {
+	:scope {
+		--speed: .5s;
+		color-scheme: light dark;
+		color: light-dark(hsl(0, 0%, 30%), white);
+	}
+
+	:scope::part(details) {
+		max-height: 50dvh;
+		overflow: auto;
+		position: relative;
+	}
+
+	:scope::part(summary) {
+		background: light-dark(
+			hsl(30, 66.667%, 85%),
+			darkslategray
+		);
+		border-bottom: 1px solid silver;
+		font-weight: bold;
+		padding: .25rem;
+		position: sticky;
+		top: 0;
+	}
+
+	:scope::part(content) {
+		background: light-dark(
+			hsl(30, 66.667%, 94%),
+			hsl(210, 12.598%, 20%)
+		);
+	}
+}

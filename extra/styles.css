@@ -1,4 +1,8 @@
-/** @version 6 **/
+/**
+ * @version 6.1
+ * @author Holmes Bryant <Holmes Bryant <https://github.com/HolmesBryant>
+ * @license GPL-3.0
+**/
 
 :root {
 	--bg1-color: snow;
@@ -13,6 +17,7 @@
 	--min-width: 180px;
 	--pad: .5rem;
 	--gap:  .25rem;
+	--speed: .5s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -35,10 +40,6 @@
 	.button,
 	button
 	{ padding: 1px; }
-
-	/* .flex > * {
-		min-width: 200px;
-	} */
 }
 
 body {
@@ -89,7 +90,8 @@ body {
   button:hover,
   summary:hover,
   details[open] > summary,
-  option:checked
+  input:checked,
+  option[selected]
   { background: var(--accent-color) }
 
   .button:active,
@@ -101,7 +103,6 @@ body {
   { background: rgba(0, 0, 0, 0.5); }
 
 /**** Borders ****/
-	.nofrills,
 	.button,
 	button,
 	details,
@@ -177,20 +178,11 @@ body {
 	.button.primary
 	{ color: var(--accent-text); }
 
+	label,
 	button,
 	.button,
-	label
+	summary
 	{ font-weight: bold; }
-
-	summary {
-		font-size: x-large;
-		font-weight: bold;
-	}
-
-	.nofrills {
-		font-size: 1rem;
-		font-weight: normal;
-	}
 
 	code
 	{ font-family: courier, monospace; }
@@ -248,11 +240,12 @@ body {
 
 	code { padding:  0 var(--pad); }
 
-	details { overflow: auto; }
-
-	details#readme[open] {
-		height: 100%;
-		max-height: 80vh;
+	details > *:first-child:not(summary) {
+	  display: flow-root;
+	  min-block-size: 0;
+	  overflow-y: clip;
+	  padding: 0;
+	  transition: padding var(--speed) ease-in-out;
 	}
 
 	details[open] summary {
@@ -260,7 +253,29 @@ body {
 		top: 0;
 	}
 
-	details[open] > summary { margin-bottom: .5rem; }
+	@supports selector(::details-content) {
+	  details::details-content {
+	    display: grid;
+	    grid-template-rows: 0fr;
+	    opacity: 0;
+	    padding: 0;
+	    transition:
+	      content-visibility var(--speed) ease-in-out allow-discrete,
+	      grid-template-rows var(--speed) ease-in-out,
+	      opacity var(--speed) ease-in-out;
+	  }
+
+	  details[open]::details-content {
+	    grid-template-rows: 1fr;
+	    opacity: 1;
+	  }
+
+	  @media (prefers-reduced-motion: reduce) {
+	    details::details-content {
+	      transition: none;
+	    }
+	  }
+	}
 
 	div { align-items: center; }
 
@@ -292,13 +307,16 @@ body {
 	input[type="radio"],
 	input[type="checkbox"],
 	input[type="color"] {
+		box-sizing: border-box;
 		margin: 0;
 		min-width: var(--min);
 	}
 
 	input:not([type="color"]),
-	textarea
-	{ padding: var(--pad); }
+	textarea {
+		box-sizing: border-box;
+		padding: var(--pad);
+	}
 
 	label
 	{ display: inline-block; }

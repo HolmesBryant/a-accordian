@@ -5,30 +5,40 @@
   font-family: inherit;
 }
 
-@supports selector(::details-content) and (transition-behavior: allow-discrete) {
+details > .accordian-content {
+  display: flow-root;
+  min-block-size: 0;
+  overflow-y: clip;
+  padding: 0;
+  transition: padding var(--speed) ease-in-out;
+}
+
+details[open] > .accordian-content {
+  padding: .5rem;
+}
+
+summary {
+  cursor: pointer;
+  font-size: unset;
+  margin: 0 !important;
+  }
+
+
+@supports selector(::details-content) {
   details::details-content {
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
+    padding: 0;
     transition:
+      content-visibility var(--speed) ease-in-out allow-discrete,
       grid-template-rows var(--speed) ease-in-out,
-      opacity var(--speed) ease-in-out,
-      content-visibility var(--speed) ease-in-out allow-discrete;
+      opacity var(--speed) ease-in-out;
   }
 
   details[open]::details-content {
     grid-template-rows: 1fr;
     opacity: 1;
-  }
-
-  details > [data-content] {
-    display: flow-root;
-    min-block-size: 0;
-    overflow-y: clip;
-  }
-
-  summary {
-    cursor: pointer;
   }
 
   @media (prefers-reduced-motion: reduce) {

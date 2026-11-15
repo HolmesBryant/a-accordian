@@ -1,5 +1,5 @@
 /**************************************************************
-	CSS styles for a-accordian.
+	CSS ( light DOM ) styles for a-accordian.
 	The component adds a "part" attribute to each <details>, <summary>,
 	and the first non-summary child (the content) of each <details>.
 	This enables you to style the accordian from a normal css stylesheet.
@@ -42,39 +42,9 @@
 
 a-accordian {
 	--speed: .5s;
-	border: 1px solid silver;
-	border-radius: .5rem;
 	color-scheme: light dark;
-	color: light-dark(black, white);
+	color: light-dark(hsl(0, 0%, 30%), white);
 }
-
-/**** Backgrounds ****/
-
-a-accordian::part(details)
-{ background: light-dark(ghostwhite, slategray) }
-
-a-accordian::part(summary)
-{ background: light-dark(linen, darkslategray) }
-
-/**** Borders ****/
-
-a-accordian::part(summary)
-{ border-bottom: 1px solid silver; }
-
-a-accordian::part(details1),
-a-accordian::part(summary1)
-{ border-radius: .5rem .5rem 0 0; }
-
-a-accordian::part(details3),
-a-accordian::part(summary3) {
-	border-bottom: none;
-	border-radius: 0 0 .5rem .5rem;
-}
-
-a-accordian::part(summary open)
-{ border-radius: 0 }
-
-/**** Misc ****/
 
 a-accordian::part(details) {
 	max-height: 50dvh;
@@ -83,6 +53,11 @@ a-accordian::part(details) {
 }
 
 a-accordian::part(summary) {
+	background: light-dark(
+		hsl(30, 66.667%, 85%),
+		darkslategray
+	);
+	border-bottom: 1px solid silver;
 	font-weight: bold;
 	padding: .25rem;
 	position: sticky;
@@ -90,5 +65,8 @@ a-accordian::part(summary) {
 }
 
 a-accordian::part(content) {
-	padding: 0 1rem;
+	background: light-dark(
+		hsl(30, 66.667%, 94%),
+		hsl(210, 12.598%, 20%)
+	);
 }

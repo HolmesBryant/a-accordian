@@ -1,0 +1,26 @@
+/**************************************************************
+CSS (Shadow DOM) styles for a-accordian.
+
+In order to use this stylesheet, you must add its URL to
+the a-accordian "stylesheets" attribute. "stylesheets" can
+take multiple comma-separated URLs.
+Example:
+<a-accordian stylesheets="styles/sheetA.css, styles/sheetB.css">
+**************************************************************/
+
+:host {
+	border: 1px solid silver;
+	border-radius: .5rem;
+}
+
+details:first-of-type,
+details:first-of-type > summary
+{ border-radius: .5rem .5rem 0 0; }
+
+details:last-of-type,
+details:last-of-type > summary {
+	border-radius: 0 0 .5rem .5rem;
+}
+
+details:last-of-type > summary
+{ border-bottom: none !important }
